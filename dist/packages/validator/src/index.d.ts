@@ -1,0 +1,35 @@
+import type { IEventBus, IHttpClient, ILogger, INotifier, IValidator, RawHit, ValidationHandler } from "@scanner/core";
+import { builtinHandlers } from "./handlers.js";
+import { credentialFingerprints } from "./smtp-env.js";
+export declare class ValidatorService implements IValidator {
+    private readonly http;
+    private readonly notifier;
+    private readonly bus;
+    private readonly logger;
+    private readonly workers;
+    private readonly queue;
+    private readonly seen;
+    private active;
+    private draining;
+    private readonly handlers;
+    private running;
+    private readonly persistFile?;
+    private readonly smtpPending;
+    private readonly smtpDeferred;
+    constructor(http: IHttpClient, notifier: INotifier, bus: IEventBus, logger: ILogger, workers: number, extra?: ValidationHandler[], persistFile?: string, smtpAuthMs?: number);
+    register(handler: ValidationHandler): void;
+    submit(hit: RawHit): void;
+    drain(): Promise<void>;
+    private waitEmpty;
+    private loop;
+    private validate;
+    private gateSmtpNotify;
+    private noteSmtpPending;
+    private validateRoutedSmtp;
+    private emitHit;
+    private enqueueHarvested;
+    private loadSeen;
+    private persistKeys;
+}
+export declare function dedupKey(hit: RawHit): string;
+export { builtinHandlers, credentialFingerprints };

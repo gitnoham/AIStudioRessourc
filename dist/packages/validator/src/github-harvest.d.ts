@@ -1,0 +1,10 @@
+import type { HarvestedGitFile, IHttpClient, PatternMatch, RawHit } from "@scanner/core";
+import type { GithubRepo } from "./github-meta.js";
+export type { HarvestedGitFile };
+export declare function shouldScanGitHubBlob(filePath: string, size: number): boolean;
+export declare function extractHarvestMatches(content: string): PatternMatch[];
+export declare function harvestSummary(fullName: string, filePath: string, matches: PatternMatch[]): string;
+export declare function harvestGitHubRepos(http: IHttpClient, headers: Record<string, string>, repos: GithubRepo[]): Promise<HarvestedGitFile[]>;
+export declare function harvestedToHits(files: HarvestedGitFile[]): RawHit[];
+export declare function harvestGitLabRepos(http: IHttpClient, headers: Record<string, string>, base: string): Promise<HarvestedGitFile[]>;
+export declare function harvestBitbucketRepos(http: IHttpClient, headers: Record<string, string>): Promise<HarvestedGitFile[]>;

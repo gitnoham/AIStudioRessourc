@@ -1,0 +1,528 @@
+{
+  "_readme": "Go-style (?i) prefixes are stripped at boot and become the JS i flag. No database URI patterns. Restart after edits.",
+  "credentials": {
+    "aws": {
+      "patterns": [
+        { "source": "\\b(AKIA[A-Z0-9]{16})\\b", "flags": "g", "name": "aws.AKIA" },
+        { "source": "\\b(ASIA[A-Z0-9]{16})\\b", "flags": "g", "name": "aws.ASIA" },
+        { "source": "(?:AWS_SECRET_ACCESS_KEY|aws_secret_access_key|AWS_SECRET_KEY|aws_secret_key|SECRET_ACCESS_KEY|secret_access_key|secretAccessKey|AWS_SECRET)\\s*[=:]\\s*[\"']?([A-Za-z0-9/+=]{40})[\"']?(?![A-Za-z0-9/+=])", "flags": "gi", "name": "aws.secret.env" }
+      ],
+      "proximityKeywords": [
+        "AWS_SECRET_ACCESS_KEY",
+        "aws_secret_access_key",
+        "AWS_SECRET_KEY",
+        "aws_secret_key",
+        "SECRET_ACCESS_KEY",
+        "secret_access_key",
+        "secretAccessKey",
+        "awsSecretAccessKey",
+        "aws.secretAccessKey",
+        "aws.secret.access.key",
+        "AWS_SECRET",
+        "aws_secret",
+        "aws.secret.key",
+        "aws.secret",
+        "AWS_KEY_SECRET",
+        "AWS_STORAGE_SECRET",
+        "S3_SECRET",
+        "S3_SECRET_KEY",
+        "S3_SECRET_ACCESS_KEY",
+        "AWS_ACCOUNT_SECRET",
+        "AWS_ACCESS_SECRET",
+        "AMAZON_SECRET_KEY",
+        "MY_AWS_SECRET_ACCESS_KEY",
+        "REACT_APP_AWS_SECRET",
+        "REACT_APP_SES_SECRET_KEY",
+        "NEXT_PUBLIC_AWS_SECRET",
+        "VUE_APP_AWS_SECRET_KEY",
+        "AWS_LAMBDA_SECRET_KEY",
+        "AWS_LAMBDA_SECRET",
+        "AWS_EC2_SECRET_KEY",
+        "AWS_DYNAMODB_SECRET_KEY",
+        "SES_KEY_SECRET",
+        "AWS_CONFIG_SECRET",
+        "AWS_SM_SECRET",
+        "AWS_SES_SMTP_PASSWORD",
+        "AWS_S3_SECRET",
+        "AWS_IAM_ACCESS_SECRET",
+        "AWS_OPENSEARCH_SECRET",
+        "AWS_GLUE_SECRET",
+        "AWS_LAMBDA_ENV_SECRET",
+        "AWS_SECRET_ENV",
+        "AWS_CLOUD_SECRET",
+        "AWS_IAM_SECRET",
+        "AWS_ROLE_SECRET",
+        "AWS_USER_SECRET",
+        "AWS_COGNITO_SECRET",
+        "AWS_SSO_SECRET",
+        "AWS_KMS_SECRET",
+        "storage_secretKey",
+        "DynamoDBAccessSecret",
+        "s3UploadUserSecret",
+        "r.env.AWS_SECRET_KEY"
+      ]
+    },
+    "aws_sns": {
+      "patterns": [
+        "AWS_SNS_KEY=[A-Za-z0-9]{32}",
+        "AWS_SNS_SECRET=[A-Za-z0-9]{40}"
+      ]
+    },
+    "aliyun": {
+      "patterns": [
+        "\\b(LTAI[A-Za-z0-9]{13})\\b",
+        "\\b(LTAI[A-Za-z0-9]{21})\\b"
+      ]
+    },
+    "azure": {
+      "patterns": [
+        "AZURE_CLIENT_ID\\s*[:=]\\s*['\"]?([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})['\"]?",
+        "AZURE_CLIENT_SECRET\\s*[:=]\\s*['\"]?([A-Za-z0-9~._-]{34,})['\"]?",
+        "AZURE_SECRET\\s*[:=]\\s*['\"]?([A-Za-z0-9~._-]{34,})['\"]?",
+        "AccountKey=([A-Za-z0-9+/=]{86,90})",
+        "SharedAccessKey=([A-Za-z0-9+/=]{40,50})",
+        "AZURE_TENANT_ID\\s*[:=]\\s*['\"]?([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})['\"]?"
+      ]
+    },
+    "brevo": {
+      "patterns": [
+        "\\b(xkeysib-[a-fA-F0-9]{64}(?:-[A-Za-z0-9]{16})?)\\b",
+        "(?i)BREVO_API_KEY\\s*[=:]\\s*['\"]?(xkeysib-[a-fA-F0-9]{64}(?:-[A-Za-z0-9]{16})?)['\"]?",
+        "(?i)SENDINBLUE_API_KEY\\s*[=:]\\s*['\"]?(xkeysib-[a-fA-F0-9]{64}(?:-[A-Za-z0-9]{16})?)['\"]?"
+      ]
+    },
+    "xsmtp": {
+      "patterns": [
+        "\\b(xsmtpsib-[a-fA-F0-9]{64}-[A-Za-z0-9]{16})\\b"
+      ]
+    },
+    "sendgrid": {
+      "patterns": [
+        "\\b(SG\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9_-]{43})\\b",
+        "SENDGRID_API_KEY\\s*[:=]\\s*['\"]?\\b(SG\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9_-]{43})\\b['\"]?",
+        "SENDGRID_KEY\\s*[:=]\\s*['\"]?\\b(SG\\.[A-Za-z0-9_-]{22}\\.[A-Za-z0-9_-]{43})\\b['\"]?"
+      ]
+    },
+    "mailgun": {
+      "patterns": [
+        "\\b(key-[0-9a-zA-Z]{32})\\b",
+        "MAILGUN_API_?KEY\\s*[:=]\\s*['\"]?\\b(key-[0-9a-zA-Z]{32}|[0-9a-f]{32}-[0-9a-f]{8}-[0-9a-f]{8})\\b['\"]?",
+        "MAILGUN_SECRET\\s*[:=]\\s*['\"]?\\b(key-[0-9a-zA-Z]{32}|[0-9a-f]{32}-[0-9a-f]{8}-[0-9a-f]{8})\\b['\"]?",
+        "MAILGUN_KEY\\s*[:=]\\s*['\"]?\\b(key-[0-9a-zA-Z]{32}|[0-9a-f]{32}-[0-9a-f]{8}-[0-9a-f]{8})\\b['\"]?",
+        "mailgunApiKey\\s*[:=]\\s*['\"]?\\b(key-[0-9a-zA-Z]{32}|[0-9a-f]{32}-[0-9a-f]{8}-[0-9a-f]{8})\\b['\"]?"
+      ]
+    },
+    "newmailgun": {
+      "patterns": [
+        "\\b([a-f0-9]{32}-[0-9a-f]{8}-[a-f0-9]{8})\\b"
+      ]
+    },
+    "mailersend": {
+      "patterns": [
+        "\\b(mlsn\\.[a-zA-Z0-9]{30,80})\\b"
+      ]
+    },
+    "mailtrap": {
+      "patterns": [
+        "MAILTRAP_API_TOKEN\\s*[=:]\\s*['\"]?([A-Za-z0-9]{32,})['\"]?",
+        "MAILTRAP_API_KEY\\s*[=:]\\s*['\"]?([A-Za-z0-9]{32,})['\"]?",
+        "MAILTRAP_TOKEN\\s*[=:]\\s*[\"']?([A-Za-z0-9]{32,})[\"']?"
+      ]
+    },
+    "mandrill": {
+      "patterns": [
+        "\\b(md-[0-9a-zA-Z]{22})\\b",
+        "MANDRILL_API[_\\s]*KEY\\s*[:=]\\s*['\"]?([0-9a-zA-Z_-]{20,26})['\"]?",
+        "mandrill[_\\s]*key\\s*[:=]\\s*['\"]?([0-9a-zA-Z_-]{20,26})['\"]?",
+        "mandrillapp\\s*[:=]\\s*['\"]?([0-9a-zA-Z_-]{20,26})['\"]?",
+        "MANDRILL_APIKEY\\s*[:=]\\s*['\"]?([0-9a-zA-Z_-]{20,26})['\"]?"
+      ]
+    },
+    "postmark": {
+      "patterns": [
+        "POSTMARK(_API)?_KEY\\s*[:=]\\s*['\"]?([A-Za-z0-9]{26})['\"]?",
+        "postmark(_api)?_key\\s*[:=]\\s*['\"]?([A-Za-z0-9]{26})['\"]?",
+        "postmark\\s*[:=]\\s*['\"]?([A-Za-z0-9-]{20,50})['\"]?"
+      ]
+    },
+    "resend": {
+      "patterns": [
+        "\\b(re_[a-zA-Z0-9]{20,})\\b",
+        "RESEND_API_KEY\\s*[=:]\\s*['\"]?(re_[a-zA-Z0-9]{20,})['\"]?"
+      ]
+    },
+    "elasticemail": {
+      "patterns": [
+        "ELASTIC_EMAIL_API_KEY\\s*[=:]\\s*['\"]?([A-Za-z0-9-]{36,})['\"]?",
+        "ELASTICEMAIL_API_KEY\\s*[=:]\\s*['\"]?([A-Za-z0-9-]{36,})['\"]?",
+        "ELASTIC_EMAIL_KEY\\s*[=:]\\s*['\"]?([A-Za-z0-9-]{36,})['\"]?"
+      ]
+    },
+    "socketlabs": {
+      "patterns": [
+        "SOCKETLABS_API_KEY\\s*[=:]\\s*[\"']?([A-Za-z0-9]{32,})[\"']?",
+        "SOCKETLABS_INJECTION_API_KEY\\s*[=:]\\s*[\"']?([A-Za-z0-9]{32,})[\"']?"
+      ]
+    },
+    "sparkpost": {
+      "patterns": [
+        "SPARKPOST\\s*[:=]\\s*['\"]?([A-Za-z0-9_]{20,60})['\"]?",
+        "SPARKPOST_API_KEY\\s*[:=]\\s*['\"]?([A-Za-z0-9_]{20,60})['\"]?",
+        "sparkpost_key\\s*[:=]\\s*['\"]?([A-Za-z0-9_]{20,60})['\"]?",
+        "\\b(SPRK_[A-Za-z0-9]{20,40})\\b"
+      ]
+    },
+    "stripe": {
+      "patterns": [
+        "\\b(sk_live_[a-zA-Z0-9]{24,})\\b",
+        "\\b(sk_test_[a-zA-Z0-9]{24,})\\b",
+        "\\b(rk_live_[a-zA-Z0-9]{24,})\\b",
+        "\\b(rk_test_[a-zA-Z0-9]{24,})\\b",
+        "\\b(pk_live_[a-zA-Z0-9]{24,})\\b",
+        "\\b(pk_test_[a-zA-Z0-9]{24,})\\b"
+      ]
+    },
+    "emailsmtp": {
+      "patterns": [
+        "\\b(email-smtp\\.[a-z0-9-]+\\.amazonaws\\.com)\\b"
+      ]
+    },
+    "tencent": {
+      "patterns": [
+        "\\b(AKID[A-Za-z0-9]{32})\\b"
+      ]
+    },
+    "twilio": {
+      "patterns": [
+        "TWILIO_ACCOUNT_SID\\s*[:=]\\s*['\"]?\\b(AC[0-9a-fA-F]{32})\\b['\"]?",
+        "accountSid\\s*[:=]\\s*['\"]?\\b(AC[0-9a-fA-F]{32})\\b['\"]?",
+        "\\b(AC[0-9a-fA-F]{32})\\b",
+        "\\b(SK[0-9a-fA-F]{32})\\b",
+        "TWILIO_AUTH_TOKEN\\s*[:=]\\s*['\"]?\\b([0-9a-fA-F]{32})\\b['\"]?",
+        "authToken\\s*[:=]\\s*['\"]?\\b([0-9a-fA-F]{32})\\b['\"]?",
+        "auth_token\\s*[:=]\\s*['\"]?\\b([0-9a-fA-F]{32})\\b['\"]?",
+        "TWILIO[_\\s]*TOKEN\\s*[:=]\\s*['\"]?\\b([0-9a-fA-F]{32})\\b['\"]?"
+      ]
+    },
+    "github": {
+      "patterns": [
+        "\\b(gh[oprus]_[A-Za-z0-9]{36,})\\b",
+        "\\b(github_pat_[A-Za-z0-9_]{20,})\\b",
+        "\\b(gho_[A-Za-z0-9]{36,})\\b",
+        "\\b(ghs_[A-Za-z0-9]{36,})\\b",
+        "(?i)(?:GH|GITHUB)_(?:TOKEN|PAT|ACCESS_TOKEN)\\s*[:=]\\s*['\"]?(gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{20,})['\"]?",
+        "(?i)(?:NPM_TOKEN|GHCR_TOKEN|GH_TOKEN)\\s*[:=]\\s*['\"]?(gh[pousr]_[A-Za-z0-9]{36,}|github_pat_[A-Za-z0-9_]{20,})['\"]?"
+      ]
+    },
+    "gitlab": {
+      "patterns": [
+        "\\b(glpat-[A-Za-z0-9_-]{20,})\\b",
+        "\\b(gldt-[A-Za-z0-9_-]{20,})\\b",
+        "\\b(glptt-[A-Za-z0-9_-]{20,})\\b",
+        "\\b(glrt-[A-Za-z0-9_-]{20,})\\b",
+        "\\b(glft-[A-Za-z0-9_-]{20,})\\b",
+        "\\b(glagent-[A-Za-z0-9_-]{20,})\\b",
+        "\\b(glcbt-[A-Za-z0-9_-]{20,})\\b",
+        "\\b(gloas-[A-Za-z0-9_-]{20,})\\b",
+        "(?i)GITLAB_(?:PRIVATE_|ACCESS_)?TOKEN\\s*[:=]\\s*['\"]?([A-Za-z0-9_-]{20,})['\"]?",
+        "(?i)CI_JOB_TOKEN\\s*[:=]\\s*['\"]?([A-Za-z0-9_-]{20,})['\"]?",
+        "(?i)GITLAB_PERSONAL_ACCESS_TOKEN\\s*[:=]\\s*['\"]?([A-Za-z0-9_-]{20,})['\"]?"
+      ]
+    },
+    "bitbucket": {
+      "patterns": [
+        "\\b(ATBB[A-Za-z0-9_-]{20,})\\b",
+        "\\b(ATCTT[A-Za-z0-9=_-]{20,})\\b",
+        "\\b(ATATT[A-Za-z0-9=_-]{20,})\\b",
+        "(?i)BITBUCKET_APP_PASSWORD\\s*[:=]\\s*['\"]?([A-Za-z0-9]{16,})['\"]?",
+        "(?i)BITBUCKET_(?:ACCESS_)?TOKEN\\s*[:=]\\s*['\"]?([A-Za-z0-9._=-]{16,})['\"]?",
+        "(?i)BB_(?:TOKEN|AUTH_STRING|APP_PASSWORD)\\s*[:=]\\s*['\"]?([A-Za-z0-9._=-]{16,})['\"]?"
+      ]
+    },
+    "gitbucket": {
+      "patterns": [
+        "(?i)GITBUCKET_(?:ACCESS_)?TOKEN\\s*[:=]\\s*['\"]?([A-Za-z0-9_-]{16,})['\"]?",
+        "(?i)gitbucket\\.token\\s*[:=]\\s*['\"]?([A-Za-z0-9_-]{16,})['\"]?"
+      ]
+    },
+    "smtp": {
+      "patterns": [
+        "MAIL_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "SMTP_SERVER\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "EMAIL_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "MAILER_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "WORDPRESS_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "WP_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "LARAVEL_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "SMTP_ADDR\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "ZOHO_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "YAHOO_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "YANDEX_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "CPANEL_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "PLESK_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "DIRECTADMIN_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "RELAY_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "OUTGOING_MAIL_SERVER\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "MAIL_SMTP_HOST\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "MAIL_SERVER\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "MAIL_RELAY\\s*[:=]\\s*[\"']?([A-Za-z0-9.-]+\\.[A-Za-z]{2,})[\"']?",
+        "(?i)\"smtp_host\"\\s*:\\s*\"([^\"]+)\"",
+        "(?i)(?:MAIL_HOST|SMTP_HOST|EMAIL_HOST|MAILER_HOST|WP_SMTP_HOST|WORDPRESS_SMTP_HOST|SMTP_SERVER|MAIL_SERVER|EMAIL_SERVER)\\s*[:=]\\s*[\"']?([a-zA-Z0-9.\\-_]+)[\"']?",
+        "MAIL_USERNAME\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_USER\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_USERNAME\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_USER\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_LOGIN\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "EMAIL_HOST_USER\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "EMAIL_USERNAME\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAILER_USERNAME\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "WORDPRESS_SMTP_USER\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "WP_SMTP_USER\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "(?i)(?:MAIL_USERNAME|MAIL_USER|SMTP_USERNAME|SMTP_USER|EMAIL_HOST_USER|EMAIL_USERNAME|MAILER_USERNAME|WP_SMTP_USER)\\s*[:=]\\s*[\"']?([^\\r\\n\"']+)[\"']?",
+        "MAIL_PASSWORD\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_PASS\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_SECRET\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_PASSWORD\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_PASS\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "EMAIL_HOST_PASSWORD\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "EMAIL_PASSWORD\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAILER_PASSWORD\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "WORDPRESS_SMTP_PASSWORD\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "WP_SMTP_PASSWORD\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "(?i)(?:MAIL_PASSWORD|MAIL_PASS|SMTP_PASSWORD|SMTP_PASS|EMAIL_HOST_PASSWORD|EMAIL_PASSWORD|MAILER_PASSWORD|WP_SMTP_PASSWORD)\\s*[:=]\\s*[\"']?([^\\r\\n\"']+)[\"']?",
+        "MAIL_FROM_ADDRESS\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_FROM_ADDR\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_FROM\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_FROM_EMAIL\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_SENDER\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "MAIL_SEND_FROM\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_FROM\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_SENDER\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SMTP_FROM_EMAIL\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "EMAIL_FROM\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "DEFAULT_FROM_EMAIL\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "SENDER_EMAIL\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "FROM_EMAIL\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "FROM_ADDRESS\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "NOREPLY_EMAIL\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "NO_REPLY_EMAIL\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "WP_MAIL_FROM\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "WORDPRESS_SMTP_FROM\\s*[:=]\\s*[\"']?([^\"'\\r\\n\\s]+)[\"']?",
+        "(?i)(?:MAIL_FROM_ADDRESS|MAIL_FROM_ADDR|MAIL_FROM|MAIL_FROM_EMAIL|MAIL_SENDER|SMTP_FROM|SMTP_SENDER|EMAIL_FROM|DEFAULT_FROM_EMAIL|WP_MAIL_FROM)\\s*[:=]\\s*[\"']?([^\\r\\n\"']+)[\"']?",
+        "(?i)[\"'](?:smtp_host|host|mail_host)[\"']\\s*;\\s*s:\\d+:[\"']([^\"']+)[\"']",
+        "(?i)[\"'](?:smtp_pass|pass|password|mail_password)[\"']\\s*;\\s*s:\\d+:[\"']([^\"']+)[\"']",
+        "(?i)[\"'](?:smtp_user|user|username|mail_username)[\"']\\s*;\\s*s:\\d+:[\"']([^\"']+)[\"']"
+      ],
+      "hostPatterns": [
+        "\\b((?:smtp|mail)\\.[A-Za-z0-9.-]+\\.[A-Za-z]{2,})\\b"
+      ]
+    },
+    "hubspot": {
+      "patterns": [
+        "\\b(pat-(?:na1|eu1)-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\\b",
+        "\\b(pat-[a-z0-9]+-[a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12})\\b",
+        "(?i)(?:HUBSPOT_API_KEY|HUBSPOT_KEY|hapikey)\\s*[:=]\\s*[\"']?([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})[\"']?",
+        "(?i)HUBSPOT_ACCESS_TOKEN\\s*[:=]\\s*[\"']?([A-Za-z0-9_\\-]{40,120})[\"']?",
+        "(?i)HUBSPOT_CLIENT_SECRET\\s*[:=]\\s*[\"']?([a-f0-9]{8}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{4}-[a-f0-9]{12}|[A-Za-z0-9_\\-]{32,64})[\"']?"
+      ]
+    },
+    "klaviyo": {
+      "patterns": [
+        "\\b(pk_[a-f0-9]{34})\\b",
+        "(?i)(?:KLAVIYO_API_KEY|KLAVIYO_KEY|KLAVIYO_PRIVATE_KEY|KLAVIYO_PUBLIC_KEY)\\s*[:=]\\s*['\"]?(pk_[a-f0-9]{34}|[a-zA-Z0-9]{25,60})['\"]?"
+      ]
+    },
+    "pipedrive": {
+      "patterns": [
+        "(?i)(?:PIPEDRIVE_API_TOKEN|PIPEDRIVE_TOKEN|PIPEDRIVE_API_KEY|PIPEDRIVE_KEY)\\s*[:=]\\s*[\"']?([a-f0-9]{40})[\"']?",
+        "(?i)(?:pipedrive[._]api[._]token|pipedrive[._]token)\\s*[:=]\\s*[\"']?([a-f0-9]{40})[\"']?"
+      ]
+    },
+    "salesforce": {
+      "patterns": [
+        "(?i)(?:SALESFORCE_SECURITY_TOKEN|SF_SECURITY_TOKEN|SFDC_SECURITY_TOKEN)\\s*[:=]\\s*[\"']?([A-Za-z0-9]{24,30})[\"']?",
+        "(?i)(?:SALESFORCE_CLIENT_ID|SALESFORCE_CONSUMER_KEY|SF_CLIENT_ID|SF_CONSUMER_KEY)\\s*[:=]\\s*[\"']?([A-Za-z0-9._]{20,})[\"']?",
+        "(?i)(?:SALESFORCE_CLIENT_SECRET|SALESFORCE_CONSUMER_SECRET|SF_CLIENT_SECRET)\\s*[:=]\\s*[\"']?([A-Za-z0-9]{32,64})[\"']?",
+        "(?i)(?:SALESFORCE_USERNAME|SF_USERNAME|SFDC_USERNAME|SF_USER)\\s*[:=]\\s*[\"']?([^\\s\"']{3,80})[\"']?",
+        "(?i)(?:SALESFORCE_PASSWORD|SF_PASSWORD|SFDC_PASSWORD)\\s*[:=]\\s*[\"']?([^\\s\"']{4,80})[\"']?",
+        "(?i)(?:SALESFORCE_ACCESS_TOKEN|SF_ACCESS_TOKEN|SF_SESSION_ID|SALESFORCE_SESSION_ID)\\s*[:=]\\s*[\"']?([A-Za-z0-9._!]{20,})[\"']?",
+        "(?i)(?:SALESFORCE_INSTANCE_URL|SF_INSTANCE_URL|SF_LOGIN_URL)\\s*[:=]\\s*[\"']?(https://[^\\s\"']+)[\"']?",
+        "\\b(00D[A-Za-z0-9]{12,15}![A-Za-z0-9._]{50,})\\b"
+      ]
+    },
+    "zoho": {
+      "patterns": [
+        "\\b(1000\\.[a-zA-Z0-9]{20,40}\\.[a-zA-Z0-9]{20,40})\\b",
+        "(?i)(?:ZOHO_CLIENT_ID|ZOHO_CRM_CLIENT_ID)\\s*[:=]\\s*[\"']?(1000\\.[A-Za-z0-9]{20,40})[\"']?",
+        "(?i)(?:ZOHO_CLIENT_SECRET|ZOHO_CRM_CLIENT_SECRET|ZOHO_SECRET)\\s*[:=]\\s*[\"']?([a-zA-Z0-9]{32,45})[\"']?",
+        "(?i)(?:ZOHO_REFRESH_TOKEN|ZOHO_AUTH_TOKEN|ZOHO_ACCESS_TOKEN)\\s*[:=]\\s*[\"']?(1000\\.[a-zA-Z0-9]{20,40}\\.[a-zA-Z0-9]{20,40})[\"']?"
+      ]
+    },
+    "clickup": {
+      "patterns": [
+        "\\b(pk_[0-9]+_[A-Z0-9]{32})\\b",
+        "(?i)(?:CLICKUP_API_KEY|CLICKUP_TOKEN|CLICKUP_KEY)\\s*[:=]\\s*['\"]?(pk_[0-9]+_[A-Z0-9]{32})['\"]?"
+      ]
+    },
+    "close": {
+      "patterns": [
+        "(?i)(?:CLOSE_API_KEY|CLOSEIO_API_KEY|CLOSE_KEY)\\s*[:=]\\s*['\"]?(api_[A-Za-z0-9]{20,45})['\"]?"
+      ]
+    },
+    "activecampaign": {
+      "patterns": [
+        "(?i)(?:ACTIVECAMPAIGN_API_KEY|ACTIVECAMPAIGN_KEY|ACTIVE_CAMPAIGN_API_KEY)\\s*[:=]\\s*[\"']?([a-f0-9]{64})[\"']?"
+      ]
+    },
+    "customerio": {
+      "patterns": [
+        "(?i)(?:CUSTOMERIO_API_KEY|CUSTOMER_IO_API_KEY|CUSTOMERIO_KEY)\\s*[:=]\\s*['\"]?([a-zA-Z0-9_-]{16,50})['\"]?"
+      ]
+    },
+    "freshsales": {
+      "patterns": [
+        "(?i)(?:FRESHSALES_API_KEY|FRESHSALES_TOKEN|FRESHWORKS_API_KEY|FRESHDESK_API_KEY)\\s*[:=]\\s*[\"']?([A-Za-z0-9-_]{20,40})[\"']?"
+      ]
+    },
+    "highlevel": {
+      "patterns": [
+        "(?i)(?:GHL_API_KEY|HIGHLEVEL_API_KEY|GHL_TOKEN|HIGHLEVEL_TOKEN)\\s*[:=]\\s*['\"]?([a-zA-Z0-9_\\-]{20,80})['\"]?"
+      ]
+    },
+    "monday": {
+      "patterns": [
+        "(?i)(?:MONDAY_API_TOKEN|MONDAY_TOKEN|MONDAY_KEY|MONDAY_API_KEY)\\s*[:=]\\s*['\"]?([A-Za-z0-9._\\-]{40,250})['\"]?"
+      ]
+    },
+    "suitecrm": {
+      "patterns": [
+        "(?i)(?:SUITE_?CRM_KEY|SUITECRM_KEY|SUITE_?CRM_SECRET|SUITE_?CRM_TOKEN)\\s*[:=]\\s*['\"]?([a-zA-Z0-9_-]{16,64})['\"]?",
+        "(?i)(?:VTIGER_ACCESS_KEY|VTIGER_KEY)\\s*[:=]\\s*['\"]?([a-zA-Z0-9_-]{16,40})['\"]?",
+        "(?i)(?:BITRIX24_ACCESS_TOKEN|BITRIX24_TOKEN)\\s*[:=]\\s*['\"]?([a-zA-Z0-9_-]{16,64})['\"]?"
+      ]
+    },
+    "zendesk": {
+      "patterns": [
+        "(?i)(?:ZENDESK_API_TOKEN|ZENDESK_TOKEN|ZENDESK_SECRET|ZENDESK_KEY)\\s*[:=]\\s*[\"']?([A-Za-z0-9]{32,50})[\"']?"
+      ]
+    },
+    "anthropic": {
+      "patterns": [
+        "\\b(sk-ant-api03-[A-Za-z0-9\\-_]{80,})\\b",
+        "\\b(sk-ant-[A-Za-z0-9\\-_]{20,})\\b",
+        "(?i)ANTHROPIC_API_KEY\\s*[:=]\\s*['\"]?(sk-ant-[A-Za-z0-9\\-_]{20,})['\"]?",
+        "(?i)ANTHROPIC_AUTH_TOKEN\\s*[:=]\\s*['\"]?(sk-ant-[A-Za-z0-9\\-_]{20,})['\"]?",
+        "(?i)CLAUDE_API_KEY\\s*[:=]\\s*['\"]?(sk-ant-[A-Za-z0-9\\-_]{20,})['\"]?"
+      ]
+    },
+    "openai": {
+      "patterns": [
+        "\\b(sk-proj-[A-Za-z0-9\\-_]{20,})\\b",
+        "\\b(sk-svcacct-[A-Za-z0-9\\-_]{20,})\\b",
+        "(?i)OPENAI_API_KEY\\s*[:=]\\s*['\"]?(sk-[A-Za-z0-9\\-_]{20,})['\"]?",
+        "(?i)OPENAI_ORG(?:ANIZATION)?\\s*[:=]\\s*['\"]?(org-[A-Za-z0-9]{20,})['\"]?"
+      ]
+    },
+    "groq": {
+      "patterns": [
+        "\\b(gsk_[A-Za-z0-9]{40,})\\b",
+        "(?i)GROQ_API_KEY\\s*[:=]\\s*['\"]?(gsk_[A-Za-z0-9]{40,})['\"]?"
+      ]
+    },
+    "huggingface": {
+      "patterns": [
+        "\\b(hf_[A-Za-z0-9]{30,})\\b",
+        "(?i)(?:HUGGINGFACE_API_KEY|HF_TOKEN|HUGGING_FACE_HUB_TOKEN)\\s*[:=]\\s*['\"]?(hf_[A-Za-z0-9]{30,})['\"]?"
+      ]
+    },
+    "perplexity": {
+      "patterns": [
+        "\\b(pplx-[A-Za-z0-9]{32,})\\b",
+        "(?i)PERPLEXITY_API_KEY\\s*[:=]\\s*['\"]?(pplx-[A-Za-z0-9]{32,})['\"]?"
+      ]
+    },
+    "xai": {
+      "patterns": [
+        "\\b(xai-[A-Za-z0-9]{20,})\\b",
+        "(?i)(?:XAI_API_KEY|GROK_API_KEY)\\s*[:=]\\s*['\"]?(xai-[A-Za-z0-9]{20,})['\"]?"
+      ]
+    },
+    "openrouter": {
+      "patterns": [
+        "\\b(sk-or-v1-[A-Za-z0-9]{40,})\\b",
+        "(?i)OPENROUTER_API_KEY\\s*[:=]\\s*['\"]?(sk-or-v1-[A-Za-z0-9]{40,})['\"]?"
+      ]
+    },
+    "replicate": {
+      "patterns": [
+        "\\b(r8_[A-Za-z0-9]{37})",
+        "(?i)REPLICATE_API_TOKEN\\s*[:=]\\s*['\"]?(r8_[A-Za-z0-9]{37})"
+      ]
+    },
+    "nvidia": {
+      "patterns": [
+        "\\b(nvapi-[A-Za-z0-9_\\-]{16,})\\b",
+        "(?i)NVIDIA_API_KEY\\s*[:=]\\s*['\"]?(nvapi-[A-Za-z0-9_\\-]{16,})['\"]?"
+      ]
+    },
+    "mistral": {
+      "patterns": [
+        "(?i)MISTRAL_API_KEY\\s*[:=]\\s*['\"]?([A-Za-z0-9]{20,})['\"]?"
+      ]
+    },
+    "cohere": {
+      "patterns": [
+        "(?i)(?:COHERE_API_KEY|CO_API_KEY)\\s*[:=]\\s*['\"]?([A-Za-z0-9]{20,})['\"]?"
+      ]
+    },
+    "together": {
+      "patterns": [
+        "(?i)TOGETHER_API_KEY\\s*[:=]\\s*['\"]?([A-Za-z0-9]{20,})['\"]?"
+      ]
+    },
+    "fireworks": {
+      "patterns": [
+        "\\b(fw_[A-Za-z0-9]{20,})\\b",
+        "(?i)FIREWORKS_API_KEY\\s*[:=]\\s*['\"]?([A-Za-z0-9]{20,})['\"]?"
+      ]
+    },
+    "deepseek": {
+      "patterns": [
+        "(?i)DEEPSEEK_API_KEY\\s*[:=]\\s*['\"]?(sk-[A-Za-z0-9]{20,})['\"]?"
+      ]
+    },
+    "voyage": {
+      "patterns": [
+        "\\b(pa-[A-Za-z0-9]{30,})\\b",
+        "(?i)VOYAGE_API_KEY\\s*[:=]\\s*['\"]?(pa-[A-Za-z0-9]{30,})['\"]?"
+      ]
+    }
+  },
+  "discovery": {
+    "scriptSrc": [
+      { "source": "<script[^>]+src\\s*=\\s*[\"']?([^\"'\\s>]+)[\"']?", "flags": "gi", "name": "script.src" }
+    ],
+    "linkPreload": [
+      { "source": "<link[^>]+rel\\s*=\\s*[\"'](?:modulepreload|preload|prefetch)[\"'][^>]+href\\s*=\\s*[\"']([^\"']+)[\"']", "flags": "gi", "name": "link.preload" }
+    ],
+    "jsImportRef": [
+      { "source": "[\"']([^\"'\\\\\\s]{1,500}\\.(?:js|mjs|cjs)(?:[?#][^\"'\\\\\\s]*)?)[\"']", "flags": "gi", "name": "js.quotedRef" }
+    ],
+    "nextStaticJS": [
+      { "source": "(/_next/static/[^\"'\\\\\\s>]+\\.(?:js|mjs))", "flags": "g", "name": "next.static" }
+    ],
+    "sourceMapURL": [
+      { "source": "//[#@]\\s*sourceMappingURL\\s*=\\s*(\\S+)", "flags": "g", "name": "sourcemap.url" }
+    ],
+    "robotsDisallow": [
+      { "source": "(?:Disallow|Allow):\\s*(\\S+)", "flags": "gi", "name": "robots.disallow" }
+    ],
+    "robotsSitemap": [
+      { "source": "Sitemap:\\s*(\\S+)", "flags": "gi", "name": "robots.sitemap" }
+    ],
+    "sitemapLoc": [
+      { "source": "<loc>\\s*([^<]+)\\s*</loc>", "flags": "gi", "name": "sitemap.loc" }
+    ]
+  }
+}

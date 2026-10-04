@@ -1,0 +1,33 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "lib": ["ES2022"],
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "declaration": true,
+    "outDir": "dist",
+    "rootDir": ".",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "noEmitOnError": true,
+    "types": ["node"],
+    "paths": {
+      "@scanner/core": ["./packages/core/src/index.ts"],
+      "@scanner/content-analyzer": ["./packages/content-analyzer/src/index.ts"],
+      "@scanner/orchestrator": ["./packages/orchestrator/src/index.ts"],
+      "@scanner/engine-paths": ["./packages/engine-paths/src/index.ts"],
+      "@scanner/engine-js": ["./packages/engine-js/src/index.ts"],
+      "@scanner/engine-git": ["./packages/engine-git/src/index.ts"],
+      "@scanner/engine-recon": ["./packages/engine-recon/src/index.ts"],
+      "@scanner/engine-vuln": ["./packages/engine-vuln/src/index.ts"],
+      "@scanner/validator": ["./packages/validator/src/index.ts"],
+      "@scanner/notifier-telegram": ["./packages/notifier-telegram/src/index.ts"]
+    }
+  },
+  "include": ["packages/**/*.ts"],
+  "exclude": ["dist", "node_modules"]
+}

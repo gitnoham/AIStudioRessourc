@@ -1,0 +1,401 @@
+npm notice run web-scanner@1.0.0 test
+npm notice run node --import tsx --test packages/core/src/url/normalize.test.ts packages/core/src/http/decode-body.test.ts packages/core/src/http/is-unreachable.test.ts packages/core/src/secrets/aws-secret.test.ts packages/core/src/concurrency/semaphore.test.ts packages/content-analyzer/src/analyzer.test.ts packages/engine-paths/src/paths.test.ts packages/engine-js/src/js.test.ts packages/engine-git/src/git.test.ts packages/engine-recon/src/recon.test.ts packages/engine-vuln/src/index.test.ts packages/notifier-telegram/src/templates.test.ts packages/notifier-telegram/src/bot-pool.test.ts packages/notifier-telegram/src/channel.test.ts packages/validator/src/smtp-env.test.ts packages/validator/src/smtp-probe.test.ts packages/validator/src/aws-github.test.ts packages/validator/src/git-forges.test.ts packages/validator/src/github-harvest.test.ts packages/validator/src/twilio.test.ts packages/validator/src/ai-models.test.ts packages/validator/src/salesforce-env.test.ts packages/validator/src/azure-env.test.ts packages/validator/src/zoho-env.test.ts packages/validator/src/crm-handlers.test.ts packages/validator/src/react2shell.test.ts
+▶ ContentAnalyzer
+  ✔ extracts AWS keys (5.6065ms)
+  ✔ pairs an AKIA with a nearby keyword secret (proximityKeywords) (1.5371ms)
+  ✔ does not pair an encoded joke secret or keys from node_modules (1.8684ms)
+  ✔ does not pair reCAPTCHA as AWS secret even next to AKIA (0.7636ms)
+  ✔ extracts Anthropic keys (0.6739ms)
+  ✔ decompresses gzip (3.1831ms)
+  ✔ rejects WAF pages (0.4449ms)
+  ✔ parses source map v3 (0.8258ms)
+  ✔ extracts sourceMappingURL (8.0119ms)
+  ✔ extracts __NEXT_DATA__ (0.9389ms)
+  ✔ drops truncated SendGrid keys (must be 69 chars) (0.4536ms)
+  ✔ drops reCAPTCHA keys paired as AWS secrets (0.2145ms)
+  ✔ drops CSS utility classes as Mandrill false positives (0.1997ms)
+  ✔ keeps secrets on every pathsToCheck, including .env.example / sample / template (16.9964ms)
+  ✔ does not treat a long HTML 200 as a secret file unless the path is env/config-like (0.2593ms)
+  ✔ does not treat a catch-all HTML page as a secret just because the path is yaml/sql/zip (0.2956ms)
+✔ ContentAnalyzer (47.1325ms)
+▶ Semaphore
+  ✔ caps concurrency at the limit and releases slots (83.2114ms)
+  ✔ rejects a queued acquire when the signal aborts (3.3424ms)
+  ✔ grants a slot after a cancelled waiter is skipped (0.396ms)
+  ✔ rejects immediately when the signal is already aborted (0.2552ms)
+✔ Semaphore (88.7595ms)
+▶ decodeHttpBody
+  ✔ gunzips GitHub-style compressed JSON (14.8118ms)
+  ✔ leaves already-decoded JSON alone even if content-encoding says gzip (20.0245ms)
+✔ decodeHttpBody (36.4252ms)
+▶ isUnreachableError
+  ✔ treats refused / missing hosts as dead (20.1366ms)
+  ✔ only treats DNS / refused as a dead host — not HTTP timeout or 403 (1.2021ms)
+  ✔ does not skip HTTP 404 or TLS pages (0.3462ms)
+  ✔ treats pool churn and HTTP-on-443 as unreachable, not dead (0.361ms)
+  ✔ treats TLS handshake failures as unreachable, not dead (0.6263ms)
+✔ isUnreachableError (25.7854ms)
+▶ isValidAwsSecretKey
+  ✔ accepts a random-looking 40-char secret (6.321ms)
+  ✔ rejects the encoded this_is_fake joke (full and 40-char prefix) (1.482ms)
+  ✔ rejects recaptcha and access-key shaped values (0.3262ms)
+  ✔ flags node_modules env paths as vendor junk, not /.env.example (0.504ms)
+✔ isValidAwsSecretKey (11.0892ms)
+▶ normalizeScanUrl
+  ✔ adds https when scheme is missing (1.0399ms)
+  ✔ keeps http as-is (0.2847ms)
+  ✔ skips comments and blanks (0.1316ms)
+  ✔ collapses trailing slash on origin (0.1307ms)
+✔ normalizeScanUrl (3.7765ms)
+▶ DedupStore
+  ✔ marks a key only once (8.9865ms)
+✔ DedupStore (9.3563ms)
+▶ originOf
+  ✔ returns scheme://host (0.3596ms)
+✔ originOf (0.7336ms)
+▶ httpsToHttpSamePort
+  ✔ keeps port 443 instead of falling back to 80 (11.3606ms)
+  ✔ keeps an explicit non-443 port (0.2125ms)
+  ✔ leaves http URLs unchanged (0.1906ms)
+✔ httpsToHttpSamePort (12.166ms)
+▶ httpsToHttpDefaultPort
+  ✔ falls back to http on port 80 (0.3752ms)
+  ✔ strips explicit 443 (0.1699ms)
+✔ httpsToHttpDefaultPort (0.696ms)
+▶ git objects
+  ✔ parses a zlib git blob (2.2095ms)
+  ✔ returns empty on invalid index (0.2643ms)
+  ✔ detects HEAD/config like the Go checker (2.0954ms)
+  ✔ applies insert and copy deltas (0.4608ms)
+  ✔ resolves OFS_DELTA objects inside a pack (18.7166ms)
+✔ git objects (26.3986ms)
+▶ GitModule
+  ✔ follows HEAD ref then scans the loose blob (31.7184ms)
+  ✔ dumps a pack listed in objects/info/packs without treating the pack SHA as a loose object (5.887ms)
+  ✔ reconstructs /backup/.git when origin /.git is missing (2.7489ms)
+  ✔ reads SVN wc.db and known text-base without pristine rebuild (1.4258ms)
+  ✔ reads Mercurial hgrc without crawling store/data (0.8699ms)
+✔ GitModule (44.6389ms)
+▶ snippetAroundMatches
+  ✔ returns the whole unpacked blob when it fits (MAIL_FROM after a long APP_KEY) (1.6505ms)
+  ✔ on a huge blob, still pulls MAIL_FROM_* far from MAIL_HOST (0.5115ms)
+✔ snippetAroundMatches (2.5745ms)
+▶ JsModule
+  ✔ finds secrets in a referenced script (6.3719ms)
+  ✔ follows quoted chunk imports from a bundle (1.2291ms)
+✔ JsModule (8.9157ms)
+▶ PathsModule
+  ✔ emits a hit from an exposed .env (17.6445ms)
+  ✔ still probes /.env.local after /.env is 403 or times out (2.2245ms)
+  ✔ emits hits from /.env.example and sibling template paths when they contain secrets (3.5855ms)
+  ✔ stops remaining path probes when the host is TCP-dead (0.7553ms)
+  ✔ fires onPathsHalfway once after half the listed paths are probed (5.6632ms)
+  ✔ stops remaining path probes when 3 non-env paths return the same 200 body (3.0027ms)
+  ✔ never emits a path hit when the body is HTML, even if regexes match (5.0987ms)
+✔ PathsModule (43.7454ms)
+▶ ReconModule
+  ✔ extracts secrets from __NEXT_DATA__ (5.3923ms)
+  ✔ re-scans robots Disallow paths and sitemap loc URLs (2.6778ms)
+✔ ReconModule (10.1513ms)
+▶ nextJsEvidence
+  ✖ detects Next.js markers in a page (7.9065ms)
+  ✔ returns no markers for a plain page (0.5469ms)
+  ✔ returns no markers for an empty page (0.3424ms)
+✖ nextJsEvidence (11.1573ms)
+▶ VulnModule
+  ✖ emits a react2shell hit for a Next.js page (1.6109ms)
+  ✔ emits nothing for a non-Next page (1.1713ms)
+  ✔ emits nothing without page content (0.4009ms)
+  ✔ emits one hit per origin (dedup vuln-origin) (0.5204ms)
+  ✔ is disabled when modules.vuln is false (0.2899ms)
+✖ VulnModule (4.713ms)
+▶ TelegramBotPool
+  ✔ collects unique tokens from botToken + botTokens (7.3219ms)
+  ✔ rotates across ready bots (0.4973ms)
+  ✔ skips a cooling bot on 429 (1.2258ms)
+  ✔ parses Telegram retry_after (0.6209ms)
+✔ TelegramBotPool (11.9944ms)
+▶ hitChannelId
+  ✔ sends valid OpenAI / Anthropic to the IA channel (0.8668ms)
+  ✔ keeps Stripe / GitHub on the main valid channel (0.2252ms)
+  ✔ sends invalid IA to the invalid channel (0.1544ms)
+  ✔ falls back to valid when IA channel is empty (0.2897ms)
+✔ hitChannelId (3.2589ms)
+▶ formatHit
+  ✔ renders a GitHub valid card as HTML like the old scanner (262.1231ms)
+  ✔ renders a GitLab valid card (0.8469ms)
+  ✔ renders GitHub harvest path and method (5.4231ms)
+  ✔ renders GitLab harvest method (0.5677ms)
+  ✔ renders an AWS SES card with permissions like the old scanner (1.3797ms)
+  ✔ renders AWS zero-perm on the warning banner (0.7776ms)
+  ✔ renders a SendGrid invalid card without N/A extras (0.5957ms)
+  ✔ renders a SendGrid valid card (0.5689ms)
+  ✔ renders a Stripe valid card with public key (0.5437ms)
+  ✔ renders an SMTP unverified card with one <code> line per MAIL field (1.8077ms)
+  ✔ renders a valid SMTP AUTH card (0.9446ms)
+  ✔ renders a Zoho CRM card after OAuth (0.4742ms)
+  ✔ renders Azure and Salesforce identity cards (2.0572ms)
+  ✔ renders OpenAI models after a valid key check (0.7291ms)
+  ✔ renders OpenAI account and models together (0.5492ms)
+  ✔ renders a Replicate account on a valid key (0.8952ms)
+  ✔ renders a Mailgun valid card (0.4757ms)
+  ✔ renders a Klaviyo valid card (0.8995ms)
+  ✔ renders a Twilio valid card with numbers (0.6634ms)
+  ✖ renders a vulnerable react2shell card (4.7029ms)
+  ✔ renders a patched react2shell card (0.5185ms)
+✖ formatHit (291.3239ms)
+▶ formatStats
+  ✔ renders the live SCAN EN COURS card (12.4849ms)
+✔ formatStats (12.6203ms)
+▶ safeHtmlTruncate
+  ✔ closes open tags when truncating (0.2725ms)
+✔ safeHtmlTruncate (0.3582ms)
+▶ parseModelIds
+  ✔ reads OpenAI data[].id (4.4057ms)
+  ✔ reads Cohere models[].name (0.3417ms)
+  ✔ dedupes and skips junk (0.4266ms)
+✔ parseModelIds (8.6569ms)
+▶ modelsMeta
+  ✔ caps the stored list (0.3408ms)
+✔ modelsMeta (0.7427ms)
+▶ HttpCheckHandler models
+  ✔ marks OpenAI valid and lists models (1.5952ms)
+  ✔ truncates glued Replicate r8_ tokens to 40 chars and reads the account (2.0197ms)
+  ✔ marks 401 invalid without models (0.3595ms)
+✔ HttpCheckHandler models (4.6699ms)
+▶ AiHandler extras
+  ✔ keeps OpenAI models and attaches billing when the extra endpoints answer (2.9586ms)
+  ✔ parses HuggingFace whoami into account fields (0.4967ms)
+  ✔ reads DeepSeek balance after models (0.9568ms)
+✔ AiHandler extras (5.0939ms)
+▶ aws xml
+  ✔ extracts STS identity fields (2.3084ms)
+  ✔ lists S3 bucket names (2.5552ms)
+✔ aws xml (20.7973ms)
+▶ formatAwsPermLines
+  ✔ splits active vs denied like the old scanner (0.5977ms)
+✔ formatAwsPermLines (0.8113ms)
+▶ githubCardMeta
+  ✔ fills identity and repo counts from /user/repos when /user is empty (0.7513ms)
+  ✔ keeps login from /user and still counts private repos listed with repo scope (0.4968ms)
+  ✔ fills identity from repo full_name when owner is omitted (0.4611ms)
+✔ githubCardMeta (2.2447ms)
+▶ GitHubHandler
+  ✔ fills identity from GraphQL viewer when /user has no login (1.7953ms)
+  ✔ harvests repo files after a valid token (3.7542ms)
+✔ GitHubHandler (5.9867ms)
+▶ azure env
+  ✔ needs tenant + client + secret (1.2599ms)
+  ✔ collects keys from a hit blob (1.6638ms)
+✔ azure env (4.3907ms)
+▶ SalesforceHandler
+  ✔ logs in over SOAP and returns org/user (5.4815ms)
+  ✔ skips a session dump without login material (0.5214ms)
+  ✔ exchanges client id + secret via OAuth client_credentials (3.1ms)
+✔ SalesforceHandler (11.6525ms)
+▶ AzureHandler
+  ✔ exchanges client credentials and reads the tenant (4.7784ms)
+  ✔ does not notify a lone Azure secret (4.4199ms)
+✔ AzureHandler (11.8982ms)
+▶ ZohoHandler
+  ✔ refreshes the token then loads org and current user (10.3244ms)
+  ✔ does not notify a refresh token without client secret (2.929ms)
+✔ ZohoHandler (13.6863ms)
+▶ GitLabHandler
+  ✔ skips placeholder tokens (8.2909ms)
+  ✔ fills identity from /api/v4/user (5.6566ms)
+  ✔ harvests .env files from GitLab projects (4.5072ms)
+  ✔ probes origin when the leak is a GitLab path (0.4119ms)
+✔ GitLabHandler (25.3363ms)
+▶ BitbucketHandler
+  ✔ fills identity from /2.0/user (10.2054ms)
+✔ BitbucketHandler (10.7763ms)
+▶ GitBucketHandler
+  ✔ fills identity from /api/v3/user (0.6523ms)
+✔ GitBucketHandler (0.8898ms)
+▶ github harvest
+  ✔ scans README and .env like the old crawler (2.5629ms)
+  ✔ extracts AKIA from file content (1.3804ms)
+  ✔ crawls a repo tree and emits a harvested file (2.4349ms)
+  ✔ turns a harvested .env into one real hit per service (0.4686ms)
+  ✔ harvests Gmail SMTP from a Laravel .env instead of tagging it SendGrid (4.1358ms)
+  ✔ pulls GitLab and Bitbucket tokens out of harvested files (0.2998ms)
+  ✔ tags GitLab harvest hits as gl-harvest (0.2208ms)
+✔ github harvest (15.9082ms)
+▶ isVulnerableReactServerDom
+  ✔ 0.0.0 → vulnérable (1.382ms)
+  ✔ 0.0.0-experimental-123 → vulnérable (0.3572ms)
+  ✔ 18.3.1 → vulnérable (2.7098ms)
+  ✔ 19.0.0 → vulnérable (0.1603ms)
+  ✔ 19.0.1 → patché (0.1771ms)
+  ✔ 19.1.0 → vulnérable (0.2355ms)
+  ✔ 19.1.1 → vulnérable (0.2096ms)
+  ✔ 19.1.2 → patché (0.4323ms)
+  ✔ 19.2.0 → vulnérable (0.1762ms)
+  ✔ 19.2.1 → patché (0.2049ms)
+  ✔ 19.3.0 → patché (0.1284ms)
+  ✔ garbage → patché (0.0728ms)
+✔ isVulnerableReactServerDom (11.3536ms)
+▶ classifyReact2Shell
+  ✔ is inconclusive when the status is not 500 (0.2886ms)
+  ✔ flags a vulnerable version leaked in a 500 (0.2927ms)
+  ✔ flags a patched version leaked in a 500 (0.445ms)
+  ✔ flags the crash signature as vulnerable even without a version (0.8264ms)
+  ✔ is inconclusive on a generic 500 without react-server-dom leak (0.1896ms)
+✔ classifyReact2Shell (2.4296ms)
+▶ buildReact2ShellProbe
+  ✔ normalizes the URL and builds the multipart body (0.3912ms)
+✔ buildReact2ShellProbe (0.4885ms)
+▶ React2ShellHandler
+  ✔ confirms a vulnerable server and sends the well-formed multipart probe (0.6851ms)
+  ✔ reports a patched server without skipNotify (0.2254ms)
+  ✔ skips notification on an inconclusive probe (0.4091ms)
+  ✔ skips notification when the request fails (1.756ms)
+  ✔ e2e local: le multipart envoyé est parsable et le verdict est vulnérable (164.315ms)
+✔ React2ShellHandler (167.864ms)
+▶ salesforce env
+  ✔ pulls username password token session and instance from one blob (3.9285ms)
+  ✔ finds a glued 00D session even without a key name (0.4343ms)
+  ✔ fingerprints one org session so duplicates collapse (0.5071ms)
+  ✔ treats client id + secret as usable without user/pass (0.1737ms)
+✔ salesforce env (8.0709ms)
+▶ parseMailAssignments
+  ✔ splits concatenated MAIL_* tokens onto their own fields (6.3408ms)
+  ✔ maps MAIL_FROM_ADDR and other from-keys onto MAIL_FROM_ADDRESS (1.0941ms)
+  ✔ formats one MAIL_* field per line (1.2586ms)
+✔ parseMailAssignments (12.0357ms)
+▶ sendgrid routing
+  ✔ requires a 69-char SG. key like the old scanner (0.5725ms)
+  ✔ routes SMTP with SG. password to SendGrid and drops truncated keys (1.6337ms)
+  ✔ does not notify SMTP without user/password or with Laravel placeholders (20.1407ms)
+  ✔ splits a vim .env.swp blob so AUTH gets emailapikey not the rest of the file (0.5774ms)
+  ✔ keeps the full SES SMTP password when a truncated MAIL_HOST context is parsed first (0.8505ms)
+  ✔ does not fingerprint a Twilio token without Account SID (2.231ms)
+  ✔ dedups a full SendGrid key once even if SMTP + SG matches coexist (0.5256ms)
+  ✔ requires both AKIA and a real 40-char secret — drops reCAPTCHA pairings (1.0701ms)
+  ✔ does not notify Stripe publishable keys without a secret (1.2222ms)
+✔ sendgrid routing (33.5654ms)
+▶ shouldHoldSmtpInvalid
+  ✔ defers AUTH-fail while another dump of the same mailbox is pending (0.3022ms)
+  ✔ skips AUTH-fail once the mailbox AUTH'd OK (0.3543ms)
+  ✔ emits a lone AUTH-fail (0.0938ms)
+✔ shouldHoldSmtpInvalid (1.0284ms)
+▶ smtpPortOrder
+  ✔ tries preferred then 587/465/25 (4.5135ms)
+✔ smtpPortOrder (9.2836ms)
+▶ authenticateSmtp
+  ✔ returns ok after AUTH LOGIN 235 (46.4655ms)
+  ✔ returns auth fail on 535 (29.7625ms)
+  ✔ returns connect when nothing listens (2.1667ms)
+✔ authenticateSmtp (79.688ms)
+▶ collectTwilioCreds
+  ✔ pairs Account SID from the JS snippet with the auth token match (2.7622ms)
+✔ collectTwilioCreds (4.7414ms)
+▶ TwilioHandler
+  ✔ loads account name, balance and phone numbers (3.0416ms)
+  ✔ skips a Twilio token without Account SID (0.2988ms)
+✔ TwilioHandler (3.5934ms)
+▶ zoho env
+  ✔ does not treat a refresh token as client id (2.726ms)
+  ✔ prefers accounts.zoho.eu when the blob mentions it (0.4664ms)
+✔ zoho env (4.4587ms)
+ℹ tests 195
+ℹ suites 52
+ℹ pass 192
+ℹ fail 3
+ℹ cancelled 0
+ℹ skipped 0
+ℹ todo 0
+ℹ duration_ms 14435.0883
+
+✖ failing tests:
+
+test at packages\engine-vuln\src\index.test.ts:9:620
+✖ detects Next.js markers in a page (7.9065ms)
+  AssertionError [ERR_ASSERTION]: Expected values to be strictly deep-equal:
+  + actual - expected
+  
+    [
+  -   '__NEXT_DATA__',
+      'next/static',
+      '__next_f'
+    ]
+  
+      at TestContext.<anonymous> (C:\Users\test\Desktop\scanner\packages\engine-vuln\src\index.test.ts:54:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Test.start (node:internal/test_runner/test:1262:17)
+      at node:internal/test_runner/test:1903:71
+      at node:internal/per_context/primordials:504:82
+      at new Promise (<anonymous>)
+      at new SafePromise (node:internal/per_context/primordials:478:3)
+      at node:internal/per_context/primordials:504:9
+      at Array.map (<anonymous>) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: [ 'next/static', '__next_f' ],
+    expected: [ '__NEXT_DATA__', 'next/static', '__next_f' ],
+    operator: 'deepStrictEqual',
+    diff: 'simple'
+  }
+
+test at packages\engine-vuln\src\index.test.ts:9:989
+✖ emits a react2shell hit for a Next.js page (1.6109ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /__NEXT_DATA__/. Input:
+  
+  'next/static, __next_f'
+  
+      at TestContext.<anonymous> (C:\Users\test\Desktop\scanner\packages\engine-vuln\src\index.test.ts:77:12)
+      at async Test.run (node:internal/test_runner/test:1409:7)
+      at async Promise.all (index 0)
+      at async Suite.run (node:internal/test_runner/test:1905:7)
+      at async Test.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: 'next/static, __next_f',
+    expected: /__NEXT_DATA__/,
+    operator: 'match',
+    diff: 'simple'
+  }
+
+test at packages\notifier-telegram\src\templates.test.ts:1:14277
+✖ renders a vulnerable react2shell card (4.7029ms)
+  AssertionError [ERR_ASSERTION]: The input did not match the regular expression /🔗 <b>URL:<\/b> <code>https:\/\/next-shop\.example<\/code>/. Input:
+  
+  '<b>Dreks</b>\n' +
+    '━━━━━━━━━━━━━━━━━\n' +
+    '\n' +
+    '🔴 <b>HIT #7 │ 💣 REACT2SHELL (CVE-2025-55182) 💣</b>\n' +
+    '<b>🚨 VULNÉRABLE — RCE POSSIBLE (CVE-2025-55182) 🚨</b>\n' +
+    '\n' +
+    '🔗 <b>URL:</b> <code>https://next-shop.example/shop</code>\n' +
+    '📂 <b>Path:</b> <code>/</code>\n' +
+    '🔎 <b>Méthode:</b> Vuln probe (React2Shell)\n' +
+    '\n' +
+    '🔗 <b>URL:</b>\n' +
+    '<code>https://next-shop.example</code>\n' +
+    '\n' +
+    '🎯 <b>CVE:</b> CVE-2025-55182 — React Server Components RCE (Server Actions)\n' +
+    '🧩 <b>Runtime:</b> react-server-dom-webpack\n' +
+    '🔢 <b>Version:</b> 19.0.0\n' +
+    '🧾 <b>Preuve:</b> react-server-dom-webpack@19.0.0\n' +
+    '🕵️ <b>Détection Next.js:</b> __NEXT_DATA__, next/static\n' +
+    '\n' +
+    '⚠️ <b>Exploit:</b> multipart forgé `$ACTION_REF_0` → exécution de code sur le serveur.\n' +
+    '\n' +
+    '⏱️ 2026-08-27 14:40:45'
+  
+      at TestContext.<anonymous> (C:\Users\test\Desktop\scanner\packages\notifier-telegram\src\templates.test.ts:508:12)
+      at Test.runInAsyncScope (node:async_hooks:227:14)
+      at Test.run (node:internal/test_runner/test:1402:25)
+      at Suite.processPendingSubtests (node:internal/test_runner/test:974:18)
+      at Test.postRun (node:internal/test_runner/test:1542:19)
+      at Test.run (node:internal/test_runner/test:1467:12)
+      at async Suite.processPendingSubtests (node:internal/test_runner/test:974:7) {
+    generatedMessage: true,
+    code: 'ERR_ASSERTION',
+    actual: '<b>Dreks</b>\n━━━━━━━━━━━━━━━━━\n\n🔴 <b>HIT #7 │ 💣 REACT2SHELL (CVE-2025-55182) 💣</b>\n<b>🚨 VULNÉRABLE — RCE POSSIBLE (CVE-2025-55182) 🚨</b>\n\n🔗 <b>URL:</b> <code>https://next-shop.example/shop</code>\n📂 <b>Path:</b> <code>/</code>\n🔎 <b>Méthode:</b> Vuln probe (React2Shell)\n\n🔗 <b>URL:</b>\n<code>https://next-shop.example</code>\n\n🎯 <b>CVE:</b> CVE-2025-55182 — React Server Components RCE (Server Actions)\n🧩 <b>Runtime:</b> react-server-dom-webpack\n🔢 <b>Version:</b> 19.0.0\n🧾 <b>Preuve:</b> react-server-dom-webpack@19.0.0\n🕵️ <b>Détection Next.js:</b> __NEXT_DATA__, next/static\n\n⚠️ <b>Exploit:</b> multipart forgé `$ACTION_REF_0` → exécution de code sur le serveur.\n\n⏱️ 2026-08-27 14:40:45',
+    expected: /🔗 <b>URL:<\/b> <code>https:\/\/next-shop\.example<\/code>/,
+    operator: 'match',
+    diff: 'simple'
+  }

@@ -1,0 +1,30 @@
+{
+  "name": "web-scanner",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Modular web scanner — paths, JS crawl, git dump, recon, validator, Telegram",
+  "workspaces": [
+    "packages/*"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "bundle": "node scripts/bundle.mjs",
+    "start": "node start.mjs start",
+    "test": "node --import tsx --test packages/core/src/url/normalize.test.ts packages/core/src/http/decode-body.test.ts packages/core/src/http/is-unreachable.test.ts packages/core/src/secrets/aws-secret.test.ts packages/core/src/concurrency/semaphore.test.ts packages/content-analyzer/src/analyzer.test.ts packages/engine-paths/src/paths.test.ts packages/engine-js/src/js.test.ts packages/engine-git/src/git.test.ts packages/engine-recon/src/recon.test.ts packages/engine-vuln/src/index.test.ts packages/notifier-telegram/src/templates.test.ts packages/notifier-telegram/src/bot-pool.test.ts packages/notifier-telegram/src/channel.test.ts packages/validator/src/smtp-env.test.ts packages/validator/src/smtp-probe.test.ts packages/validator/src/aws-github.test.ts packages/validator/src/git-forges.test.ts packages/validator/src/github-harvest.test.ts packages/validator/src/twilio.test.ts packages/validator/src/ai-models.test.ts packages/validator/src/salesforce-env.test.ts packages/validator/src/azure-env.test.ts packages/validator/src/zoho-env.test.ts packages/validator/src/crm-handlers.test.ts packages/validator/src/react2shell.test.ts packages/validator/src/validator-seen.test.ts"
+  },
+  "engines": {
+    "node": ">=20"
+  },
+  "dependencies": {
+    "adm-zip": "^0.5.16",
+    "ip-address": "^10.7.2",
+    "undici": "^6.21.0"
+  },
+  "devDependencies": {
+    "@types/adm-zip": "^0.5.7",
+    "@types/node": "^22.13.0",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

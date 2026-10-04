@@ -1,0 +1,17 @@
+{
+  "name": "@scanner/orchestrator",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "./src/index.ts",
+  "exports": { ".": "./src/index.ts" },
+  "dependencies": {
+    "@scanner/core": "*",
+    "@scanner/content-analyzer": "*",
+    "@scanner/validator": "*",
+    "@scanner/notifier-telegram": "*",
+    "@scanner/engine-paths": "*",
+    "@scanner/engine-js": "*",
+    "@scanner/engine-git": "*",
+    "@scanner/engine-recon": "*"
+  }
+}
